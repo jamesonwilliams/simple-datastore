@@ -1,0 +1,27 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.6.3'
+        classpath 'com.amplifyframework:amplify-tools-gradle-plugin:0.2.1'
+    }
+}
+// A problem occurred starting process 'command 'npx''
+// Okay!
+// apply plugin: 'com.amplifyframework.amplifytools'
+
+allprojects {
+    repositories {
+        mavenLocal()
+        google()
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

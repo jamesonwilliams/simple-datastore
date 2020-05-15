@@ -1,0 +1,2 @@
+rootProject.name='DataStore Sample App'
+include ':app'

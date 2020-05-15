@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">DataStore Sample App</string>
+
+    <!-- Logging window contents -->
+    <string name="not_yet">Nothing here yet…</string>
+    <string name="empty" />
+
+    <!-- Button labels -->
+    <string name="create_a_post">Create a post</string>
+    <string name="list_all_posts">List all posts</string>
+    <string name="update_all_posts">Update all posts</string>
+    <string name="delete_all_posts">Delete all posts</string>
+    <string name="start_subscription">Subscribe…</string>
+    <string name="stop_everything">Stop everything</string>
+    <string name="clear_log">Clear log</string>
+</resources>
