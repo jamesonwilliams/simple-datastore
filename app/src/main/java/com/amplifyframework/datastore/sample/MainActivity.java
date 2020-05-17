@@ -1,158 +1,93 @@
 package com.amplifyframework.datastore.sample;
 
+import android.content.Context;
+import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Bundle;
-import android.util.Log;
-import android.widget.TextView;
+import com.amplifyframework.rx.RxDataStoreCategoryBehavior;
 
-import com.amplifyframework.AmplifyException;
-import com.amplifyframework.api.aws.AWSApiPlugin;
-import com.amplifyframework.datastore.AWSDataStorePlugin;
-import com.amplifyframework.datastore.generated.model.Post;
-import com.amplifyframework.datastore.generated.model.PostStatus;
-import com.amplifyframework.rx.RxAmplify;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-import java.util.Random;
-import java.util.UUID;
-
-import io.reactivex.disposables.CompositeDisposable;
-
-public class MainActivity extends AppCompatActivity {
-    private static final String TAG = MainActivity.class.getSimpleName();
-
-    private CompositeDisposable ongoingOperations;
-    private TextView logView;
+public class MainActivity extends AppCompatActivity
+        implements LocalPresentation.View, RemotePresentation.View {
+    private LocalPresentation.Presenter localPresenter;
+    private RemotePresentation.Presenter remotePresenter;
+    private Logger localLog;
+    private Logger remoteLog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        bindViews();
+
+        Context context = getApplicationContext();
+
+        LocalPresentation.View localView = this;
+        RxDataStoreCategoryBehavior dataStore = RxAmplifyFactory.dataStore(context);
+        LocalPresentation.PostInteractor localInteractor = new LocalDataStoreInteractor(dataStore);
+        this.localPresenter = new LocalPresenter(localInteractor, localView);
+
+        RemotePresentation.View remoteView = this;
+        RxAppSyncClient appSync = RxAmplifyFactory.appSync(context);
+        RemotePresentation.ApiInteractor remoteInteractor = new RemoteApiInteractor(appSync);
+        this.remotePresenter = new RemotePresenter(remoteInteractor, remoteView);
+    }
+
+    private void bindViews() {
         setContentView(R.layout.activity_main);
+        this.localLog = new Logger(Tag.LOCAL, findViewById(R.id.local_log));
+        findViewById(R.id.create_local).setOnClickListener(v -> localPresenter.createLocalItems());
+        findViewById(R.id.update_local).setOnClickListener(v -> localPresenter.updateLocalItems());
+        findViewById(R.id.delete_local).setOnClickListener(v -> localPresenter.deleteLocalItems());
+        findViewById(R.id.query_local).setOnClickListener(v -> localPresenter.listLocalItems());
+        findViewById(R.id.clear_local).setOnClickListener(v -> localPresenter.clearLocalLog());
 
-        this.logView = findViewById(R.id.log_window);
-        this.ongoingOperations = new CompositeDisposable();
-
-        try {
-            clearDatabase();
-            RxAmplify.addPlugin(new AWSApiPlugin());
-            RxAmplify.addPlugin(new AWSDataStorePlugin());
-            RxAmplify.configure(getApplicationContext());
-        } catch (AmplifyException configurationFailure) {
-            throw new RuntimeException(configurationFailure);
-        }
-
-        findViewById(R.id.add_post_button).setOnClickListener(v -> createPost());
-        findViewById(R.id.list_posts_button).setOnClickListener(v -> listPosts());
-        findViewById(R.id.update_post_button).setOnClickListener(v -> updatePosts());
-        findViewById(R.id.delete_all_posts).setOnClickListener(v -> deleteAll());
-        findViewById(R.id.begin_subscription).setOnClickListener(v -> beginSubscription());
-        findViewById(R.id.stop_everything).setOnClickListener(v -> stopEverything());
-        findViewById(R.id.clear_log).setOnClickListener(v -> clearLogs());
-    }
-
-    private void clearDatabase() {
-        appendLog("Clearing DataBase...");
-        getApplicationContext().deleteDatabase("AmplifyDatabase.db");
-    }
-
-    private void appendLog(String log) {
-        Log.i(TAG, log);
-        runOnUiThread(() -> logView.append(log + "\n"));
-    }
-
-    private void clearLogs() {
-        runOnUiThread(() -> logView.setText(R.string.empty));
-        appendLog("Log cleared.");
-    }
-
-    private void beginSubscription() {
-        ongoingOperations.add(
-            RxAmplify.DataStore.observe(Post.class)
-                .doOnSubscribe(disposable -> appendLog("Started subscription."))
-                .doOnDispose(() -> appendLog("Subscription cancelled."))
-                .subscribe(
-                    postChange -> appendLog("Item changed: " + postChange.type() + ", " + postChange.item().getId()),
-                    subscriptionFailure -> appendLog(Log.getStackTraceString(subscriptionFailure)),
-                    () -> appendLog("Subscription completed.")
-                )
-        );
-    }
-
-    private void stopEverything() {
-        if (ongoingOperations != null && !ongoingOperations.isDisposed()) {
-            ongoingOperations.clear();
+        if (!Landscape.isLandscape(this)) {
+            Fullscreen.showSystemUI(getWindow());
+            findViewById(R.id.stop_everything).setOnClickListener(v -> localPresenter.stopAllLocalActivities());
+            findViewById(R.id.begin_subscription).setOnClickListener(v -> localPresenter.startSubscription());
+        } else {
+            Fullscreen.hideSystemUI(getWindow());
+            this.remoteLog = new Logger(Tag.REMOTE, findViewById(R.id.remote_log));
+            findViewById(R.id.create_remote).setOnClickListener(v -> remotePresenter.createRemotePost());
+            findViewById(R.id.update_remote).setOnClickListener(v -> remotePresenter.updateRemotePosts());
+            findViewById(R.id.delete_remote).setOnClickListener(v -> remotePresenter.deleteRemotePosts());
+            findViewById(R.id.query_remote).setOnClickListener(v -> remotePresenter.listRemotePosts());
+            findViewById(R.id.clear_remote).setOnClickListener(v -> remotePresenter.clearRemoteLogs());
         }
     }
 
-    private void deleteAll() {
-        ongoingOperations.add(
-            RxAmplify.DataStore.query(Post.class)
-                .flatMapCompletable(RxAmplify.DataStore::delete)
-                .subscribe(
-                    () -> appendLog("Deleted all posts."),
-                    failure -> appendLog("Failed to delete posts: " + Log.getStackTraceString(failure))
-                )
-        );
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
     }
 
-    private void createPost() {
-        ongoingOperations.add(
-            RxAmplify.DataStore.save(Post.builder()
-                .title(RandomTitle.nextTitle())
-                .rating(RandomRating.nextRating())
-                .status(PostStatus.ACTIVE)
-                .build())
-                .subscribe(
-                    () -> appendLog("Created a post."),
-                    failure -> appendLog("Failed to save a post: " + Log.getStackTraceString(failure))
-                )
-        );
+    @Override
+    public void displayLocalText(String text) {
+        localLog.log(text);
     }
 
-    private void updatePosts() {
-        ongoingOperations.add(
-            RxAmplify.DataStore.query(Post.class)
-                .flatMapCompletable(post -> RxAmplify.DataStore.save(post.copyOfBuilder()
-                    .rating(2)
-                    .status(PostStatus.INACTIVE)
-                    .title("Updated title.")
-                    .build()))
-                .subscribe(
-                    () -> appendLog("Updated all posts."),
-                    failure -> appendLog("Failed to update posts: " + Log.getStackTraceString(failure))
-                )
-        );
+    @Override
+    public void clearLocalText() {
+        localLog.clear();
     }
 
-    private void listPosts() {
-        ongoingOperations.add(
-            RxAmplify.DataStore.query(Post.class).subscribe(
-                post -> appendLog(toString(post)),
-                failure -> appendLog(Log.getStackTraceString(failure)),
-                () -> appendLog("Finished listing posts.")
-            )
-        );
+    @Override
+    public void displayRemoteText(String text) {
+        remoteLog.log(text);
     }
 
-    private String toString(Post post) {
-        return "Post{\n" +
-            "  title=" + post.getTitle() + "\n" +
-            "  id=" + post.getId() + "\n" +
-            "  rating=" + post.getRating() + "\n" +
-            "  status=" + post.getStatus() + "\n" +
-            "}";
+    @Override
+    public void clearRemoteText() {
+        remoteLog.clear();
     }
 
-    private static class RandomRating {
-        static int nextRating() {
-            return new Random().nextInt(5);
-        }
-    }
-
-    private static class RandomTitle {
-        static String nextTitle() {
-            return "Title " + UUID.randomUUID().toString();
-        }
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Tag {
+        String REMOTE = "datastore-demo:remote";
+        String LOCAL = "datastore-demo:local";
     }
 }

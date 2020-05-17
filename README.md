@@ -1,6 +1,7 @@
 # Simple DataStore Sample App
 
 <img src="./screenshot.png" width="300px"/>
+<img src="./landscape-screenshot.png" width="500px" />
 
 ## Installation
 To use, install, and evaluate this application, please do the following:
@@ -37,17 +38,24 @@ type Post @model {
 The purpose of this application is to test the Amplify DataStore.
 
 For repeatable results, you should always swipe-kill the app, before
-running a manual test case.
+running a manual test case:
+```
+adb shell am force-stop com.amplifyframework.datastore.sample
+adb uninstall com.amplifyframework.datastore.sample
+```
 
 You may also manually update/clear your AppSync backend, while using
 this app. It can be useful to do this _before_ opening this app, so that
-the app won't sync a bunch of old data.
+the app won't sync a bunch of old data. The script in `clear-db.sh` is
+useful for this.
 
 The best way to understand the behavior of the different buttons is to
 read the
 [`MainActivity.java`](https://github.com/jamesonwilliams/simple-datastore/blob/master/app/src/main/java/com/amplifyframework/datastore/sample/MainActivity.java).
 
-This is the behavior of the buttons in the UI:
+
+## Portrait Mode
+These are the behaviors of the buttons in the portrait mode of the UI:
 
 1. _CREATE A POST_: Create a single post, with some random data. Display
    this post on the screen.
@@ -62,6 +70,12 @@ This is the behavior of the buttons in the UI:
    cancel mutation, and it would also tear down a subscription.
 7. _CLEAR LOG_: This doesn't do anything to the DataStore. This just
    clears the log in the app window.
+
+## Landscape Mode
+
+The left side shows client-side state, the right side shows AppSync side
+state. As of this time, the right side doesn't include _delete,
+_lastChangedAt, _version, so it is of limited utility.
 
 
 ## Advanced Usage

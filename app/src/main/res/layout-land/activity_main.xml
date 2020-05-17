@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
+
+    <!-- Views for local models -->
+
+    <Button
+        android:id="@+id/create_local"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/create_abbreviation"
+        app:layout_constraintStart_toEndOf="@+id/local_log"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/update_local"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/update_abbreviation"
+        app:layout_constraintStart_toEndOf="@+id/local_log"
+        app:layout_constraintTop_toBottomOf="@+id/create_local" />
+
+    <Button
+        android:id="@+id/delete_local"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/delete_abbreviation"
+        app:layout_constraintStart_toEndOf="@+id/local_log"
+        app:layout_constraintTop_toBottomOf="@+id/update_local" />
+
+    <Button
+        android:id="@+id/query_local"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/query_abbreviation"
+        app:layout_constraintStart_toEndOf="@+id/local_log"
+        app:layout_constraintTop_toBottomOf="@+id/delete_local" />
+
+    <!-- Views for remote models -->
+
+    <Button
+        android:id="@+id/clear_local"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/clear_abbreviation"
+        app:layout_constraintStart_toEndOf="@+id/local_log"
+        app:layout_constraintTop_toBottomOf="@+id/query_local" />
+
+    <TextView
+        android:id="@+id/local_log"
+        android:layout_width="250dp"
+        android:layout_height="fill_parent"
+        android:background="#4DC28131"
+        android:gravity="bottom"
+        android:text="@string/local_datastore_side"
+        android:scrollbars = "vertical"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/create_remote"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:text="@string/create_abbreviation"
+        app:layout_constraintEnd_toStartOf="@+id/remote_log"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/update_remote"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:text="@string/update_abbreviation"
+        app:layout_constraintEnd_toStartOf="@+id/remote_log"
+        app:layout_constraintTop_toBottomOf="@+id/create_remote" />
+
+    <Button
+        android:id="@+id/delete_remote"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:text="@string/delete_abbreviation"
+        app:layout_constraintEnd_toStartOf="@+id/remote_log"
+        app:layout_constraintTop_toBottomOf="@+id/update_remote" />
+
+    <Button
+        android:id="@+id/query_remote"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:text="@string/query_abbreviation"
+        app:layout_constraintEnd_toStartOf="@+id/remote_log"
+        app:layout_constraintTop_toBottomOf="@+id/delete_remote" />
+
+    <Button
+        android:id="@+id/clear_remote"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:text="@string/clear_abbreviation"
+        app:layout_constraintEnd_toStartOf="@+id/remote_log"
+        app:layout_constraintTop_toBottomOf="@+id/query_remote" />
+
+    <TextView
+        android:id="@+id/remote_log"
+        android:layout_width="250dp"
+        android:layout_height="fill_parent"
+        android:background="#54BBC2D1"
+        android:gravity="bottom"
+        android:text="@string/appsync_side"
+        android:scrollbars = "vertical"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

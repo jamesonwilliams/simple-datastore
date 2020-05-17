@@ -2,6 +2,8 @@
     <string name="app_name">DataStore Sample App</string>
 
     <!-- Logging window contents -->
+    <string name="appsync_side">AppSync side…</string>
+    <string name="local_datastore_side">Local DataStore side…</string>
     <string name="not_yet">Nothing here yet…</string>
     <string name="empty" />
 
@@ -13,4 +15,11 @@
     <string name="start_subscription">Subscribe…</string>
     <string name="stop_everything">Stop everything</string>
     <string name="clear_log">Clear log</string>
+
+    <!-- Button abbreviations for landscape mode -->
+    <string name="create_abbreviation">CR</string>
+    <string name="update_abbreviation">UD</string>
+    <string name="delete_abbreviation">DEL</string>
+    <string name="query_abbreviation">QY</string>
+    <string name="clear_abbreviation">CLR</string>
 </resources>
