@@ -1,8 +1,10 @@
 package com.amplifyframework.datastore.sample;
 
-import android.util.Log;
+import android.util.Pair;
 
 import com.amplifyframework.datastore.generated.model.Post;
+
+import java.util.Locale;
 
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
@@ -22,8 +24,9 @@ final class LocalPresenter implements LocalPresentation.Presenter {
     public void createLocalItems() {
         ongoingOperations.clear();
         ongoingOperations.add(
-            interactor.createRandom()
-                .subscribe(createdPost -> view.displayLocalText("CR: " + toString(createdPost)))
+            interactor.createRandom().subscribe(createdPost ->
+                view.displayLocalLogLine(LogLine.create(title(createdPost), details(createdPost)))
+            )
         );
     }
 
@@ -34,8 +37,8 @@ final class LocalPresenter implements LocalPresentation.Presenter {
             interactor.list()
                 .flatMap(interactor::updateAll)
                 .flatMapObservable(Observable::fromIterable)
-                .subscribe(
-                    updatedPost -> view.displayLocalText("UPD: " + toString(updatedPost))
+                .subscribe(updatedPost ->
+                    view.displayLocalLogLine(LogLine.update(title(updatedPost), details(updatedPost)))
                 )
         );
     }
@@ -46,7 +49,9 @@ final class LocalPresenter implements LocalPresentation.Presenter {
         ongoingOperations.add(
             interactor.list()
                 .flatMapObservable(Observable::fromIterable)
-                .subscribe(foundPost -> view.displayLocalText("QRY: " + toString(foundPost)))
+                .subscribe(foundPost ->
+                    view.displayLocalLogLine(LogLine.query(title(foundPost), details(foundPost)))
+                )
         );
     }
 
@@ -57,7 +62,9 @@ final class LocalPresenter implements LocalPresentation.Presenter {
             interactor.list()
                 .flatMap(items -> interactor.deleteAll(items).toSingleDefault(items))
                 .flatMapObservable(Observable::fromIterable)
-                .subscribe(deletedPost -> view.displayLocalText("DEL: " + toString(deletedPost)))
+                .subscribe(deletedPost ->
+                    view.displayLocalLogLine(LogLine.delete(title(deletedPost), details(deletedPost)))
+                )
         );
     }
 
@@ -66,19 +73,19 @@ final class LocalPresenter implements LocalPresentation.Presenter {
         ongoingOperations.clear();
         ongoingOperations.add(
             interactor.subscribe()
-                .doOnSubscribe(ignored -> view.displayLocalText("Subscription started."))
-                .doOnDispose(() -> view.displayLocalText("Subscription disposed."))
+                .doOnSubscribe(token -> view.displayLocalLogLine(LogLine.subscription("Started.", token.toString())))
+                .doOnDispose(() -> view.displayLocalLogLine(LogLine.subscription("Disposed.", "")))
                 .subscribe(
-                    nextData -> view.displayLocalText("Got subscription data = " + toString(nextData)),
-                    failure -> view.displayLocalText("Subscription ended in failure."),
-                    () -> view.displayLocalText("Subscription ended gracefully.")
+                    nextData -> view.displayLocalLogLine(LogLine.subscription(title(nextData), details(nextData))),
+                    failure -> view.displayLocalLogLine(LogLine.subscription("Failed.", failure.getMessage())),
+                    () -> view.displayLocalLogLine(LogLine.subscription("Ended gracefully.", ""))
                 )
         );
     }
 
     @Override
     public void clearLocalLog() {
-        view.clearLocalText();
+        view.clearLocalLineItems();
     }
 
     @Override
@@ -86,12 +93,19 @@ final class LocalPresenter implements LocalPresentation.Presenter {
         ongoingOperations.clear();
     }
 
-    private String toString(Object anything) {
-        if (anything instanceof Throwable) {
-            return Log.getStackTraceString((Throwable) anything);
-        } else if (anything instanceof Post) {
-            return Posts.toString((Post) anything);
-        }
-        return String.valueOf(anything);
+    private static String title(Post post) {
+        return post.getTitle();
+    }
+
+    private static String details(Post post) {
+        return post.getId().substring(0, 7);
+    }
+
+    private static String title(Pair<Post, Modification> pair) {
+        return pair.first.getTitle();
+    }
+
+    private static String details(Pair<Post, Modification> pair) {
+        return String.format(Locale.US, "%s, %s", pair.second.name(), pair.first.getId());
     }
 }

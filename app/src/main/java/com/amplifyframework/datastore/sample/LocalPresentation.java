@@ -12,8 +12,8 @@ import io.reactivex.Single;
 
 interface LocalPresentation {
     interface View {
-        void displayLocalText(String text);
-        void clearLocalText();
+        void displayLocalLogLine(LogLine logLine);
+        void clearLocalLineItems();
     }
 
     interface Presenter {

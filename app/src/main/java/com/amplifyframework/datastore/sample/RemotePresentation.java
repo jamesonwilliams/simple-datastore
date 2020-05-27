@@ -3,15 +3,13 @@ package com.amplifyframework.datastore.sample;
 import com.amplifyframework.datastore.appsync.ModelWithMetadata;
 import com.amplifyframework.datastore.generated.model.Post;
 
-import java.util.List;
-
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
 interface RemotePresentation {
     interface View {
-        void displayRemoteText(String text);
-        void clearRemoteText();
+        void displayRemoteLogLine(LogLine logLine);
+        void clearRemoteLineItems();
     }
 
     interface Presenter {

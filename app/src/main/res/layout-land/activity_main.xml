@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/content"
         tools:context=".MainActivity">
 
     <!-- Views for local models -->
@@ -60,15 +62,11 @@
         app:layout_constraintStart_toEndOf="@+id/local_log"
         app:layout_constraintTop_toBottomOf="@+id/query_local" />
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/local_log"
         android:layout_width="250dp"
         android:layout_height="fill_parent"
-        android:background="#4DC28131"
-        android:gravity="bottom"
-        android:text="@string/local_datastore_side"
-        android:scrollbars = "vertical"
-        android:textSize="10sp"
+        android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -122,15 +120,11 @@
         app:layout_constraintEnd_toStartOf="@+id/remote_log"
         app:layout_constraintTop_toBottomOf="@+id/query_remote" />
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/remote_log"
         android:layout_width="250dp"
         android:layout_height="fill_parent"
-        android:background="#54BBC2D1"
-        android:gravity="bottom"
-        android:text="@string/appsync_side"
-        android:scrollbars = "vertical"
-        android:textSize="10sp"
+        android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
