@@ -24,8 +24,8 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.google.android.material:material:1.1.0'
 
-    implementation 'com.amplifyframework:core:master'
-    implementation 'com.amplifyframework:aws-api:master'
-    implementation 'com.amplifyframework:aws-datastore:master'
-    implementation 'com.amplifyframework:rxbindings:master'
+    implementation 'com.amplifyframework:core:main'
+    implementation 'com.amplifyframework:aws-api:main'
+    implementation 'com.amplifyframework:aws-datastore:main'
+    implementation 'com.amplifyframework:rxbindings:main'
 }
