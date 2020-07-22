@@ -8,6 +8,8 @@ subscription OnCreatePost {
     _version
     _deleted
     _lastChangedAt
+    createdAt
+    updatedAt
   }
 }
 subscription OnUpdatePost {
@@ -19,6 +21,8 @@ subscription OnUpdatePost {
     _version
     _deleted
     _lastChangedAt
+    createdAt
+    updatedAt
   }
 }
 subscription OnDeletePost {
@@ -30,5 +34,7 @@ subscription OnDeletePost {
     _version
     _deleted
     _lastChangedAt
+    createdAt
+    updatedAt
   }
 }

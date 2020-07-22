@@ -19,6 +19,8 @@ query SyncPosts(
       _version
       _deleted
       _lastChangedAt
+      createdAt
+      updatedAt
     }
     nextToken
     startedAt
@@ -33,6 +35,8 @@ query GetPost($id: ID!) {
     _version
     _deleted
     _lastChangedAt
+    createdAt
+    updatedAt
   }
 }
 query ListPosts(
@@ -49,6 +53,8 @@ query ListPosts(
       _version
       _deleted
       _lastChangedAt
+      createdAt
+      updatedAt
     }
     nextToken
     startedAt
