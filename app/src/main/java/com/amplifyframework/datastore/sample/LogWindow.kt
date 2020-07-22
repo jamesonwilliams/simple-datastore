@@ -32,9 +32,7 @@ internal class LogWindow(parent: ViewGroup, @IdRes resourceId: Int) {
         recyclerView.scrollToPosition(adapter.size() - 1)
     }
 
-    fun clear() {
-        adapter.clear()
-    }
+    fun clear(): Unit = adapter.clear()
 
     private class LogLineAdapter internal constructor() : Adapter<LineItemViewHolder>() {
         private val lines: MutableList<LogLine> = ArrayList()
@@ -49,9 +47,7 @@ internal class LogWindow(parent: ViewGroup, @IdRes resourceId: Int) {
             super.notifyDataSetChanged()
         }
 
-        fun size(): Int {
-            return lines.size
-        }
+        fun size(): Int = lines.size
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LineItemViewHolder {
             val lintItemView = LayoutInflater.from(parent.context)
@@ -59,13 +55,9 @@ internal class LogWindow(parent: ViewGroup, @IdRes resourceId: Int) {
             return LineItemViewHolder(lintItemView)
         }
 
-        override fun onBindViewHolder(holder: LineItemViewHolder, position: Int) {
-            holder.setLine(lines[position])
-        }
+        override fun onBindViewHolder(holder: LineItemViewHolder, position: Int) = holder.setLine(lines[position])
 
-        override fun getItemCount(): Int {
-            return lines.size
-        }
+        override fun getItemCount(): Int = lines.size
 
         private class LineItemViewHolder internal constructor(lintItemView: RelativeLayout) : ViewHolder(lintItemView) {
             private val detailsView: TextView = lintItemView.findViewById(id.details)

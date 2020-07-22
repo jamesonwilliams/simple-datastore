@@ -16,24 +16,19 @@ internal class LocalDataStoreInteractor(private val dataStore: RxDataStoreCatego
         return dataStore.save(post).toSingleDefault(post)
     }
 
-    override fun updateAll(posts: List<Post>): Single<List<Post>> {
-        return Observable.fromIterable(posts)
+    override fun updateAll(posts: List<Post>): Single<List<Post>> =
+        Observable.fromIterable(posts)
             .map { Posts.update(it) }
             .flatMapSingle { dataStore.save(it).toSingleDefault(it) }
             .toList()
-    }
 
-    override fun list(): Single<List<Post>> {
-        return dataStore.query(Post::class.java).toList()
-    }
+    override fun list(): Single<List<Post>> = dataStore.query(Post::class.java).toList()
 
-    override fun deleteAll(posts: List<Post>): Completable {
-        return Observable.fromIterable(posts)
-            .flatMapCompletable { dataStore.delete(it) }
-    }
+    override fun deleteAll(posts: List<Post>): Completable =
+        Observable.fromIterable(posts).flatMapCompletable { dataStore.delete(it) }
 
-    override fun subscribe(): Observable<Pair<Post, Modification>> {
-        return dataStore.observe(Post::class.java)
-            .map { Pair.create(it.item(), Modification.from(it.type())) }
-    }
+    override fun subscribe(): Observable<Pair<Post, Modification>> =
+        dataStore.observe(Post::class.java).map {
+            Pair.create(it.item(), Modification.from(it.type()))
+        }
 }

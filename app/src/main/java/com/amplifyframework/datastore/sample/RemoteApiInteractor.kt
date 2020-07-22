@@ -9,27 +9,23 @@ import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 
 internal class RemoteApiInteractor(private val appSync: RxAppSyncClient) : ApiInteractor {
-    override fun createRandom(): Single<ModelWithMetadata<Post>> {
-        return appSync.create(Posts.random("Remote"))
+    override fun createRandom(): Single<ModelWithMetadata<Post>> =
+        appSync.create(Posts.random("Remote"))
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
-    }
 
-    override fun update(post: ModelWithMetadata<Post>): Single<ModelWithMetadata<Post>> {
-        return appSync.update(Posts.update(post.model), post.syncMetadata.version ?: -1)
+    override fun update(post: ModelWithMetadata<Post>): Single<ModelWithMetadata<Post>> =
+        appSync.update(Posts.update(post.model), post.syncMetadata.version ?: -1)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
-    }
 
-    override fun delete(post: ModelWithMetadata<Post>): Single<ModelWithMetadata<Post>> {
-        return appSync.delete(Post::class.java, post.model.id, post.syncMetadata.version ?: -1)
+    override fun delete(post: ModelWithMetadata<Post>): Single<ModelWithMetadata<Post>> =
+        appSync.delete(Post::class.java, post.model.id, post.syncMetadata.version ?: -1)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
-    }
 
-    override fun list(): Observable<ModelWithMetadata<Post>> {
-        return appSync.sync(Post::class.java)
+    override fun list(): Observable<ModelWithMetadata<Post>> =
+        appSync.sync(Post::class.java)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
-    }
 }

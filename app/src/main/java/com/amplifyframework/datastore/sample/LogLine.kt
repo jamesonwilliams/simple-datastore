@@ -46,28 +46,4 @@ data class LogLine constructor(val eventType: EventType, val title: String, val 
             return create(ERROR, title, details)
         }
     }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as LogLine
-
-        if (eventType != other.eventType) return false
-        if (title != other.title) return false
-        if (details != other.details) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = eventType.hashCode()
-        result = 31 * result + title.hashCode()
-        result = 31 * result + (details?.hashCode() ?: 0)
-        return result
-    }
-
-    override fun toString(): String {
-        return "LogLine(eventType=$eventType, title='$title', details=$details)"
-    }
 }

@@ -8,8 +8,6 @@ import com.amplifyframework.datastore.sample.RemotePresentation.View
 
 import io.reactivex.disposables.CompositeDisposable
 
-import java.util.Locale
-
 internal class RemotePresenter(private val interactor: ApiInteractor, private val view: View) : Presenter {
     private val ongoingOperations: CompositeDisposable = CompositeDisposable()
 
@@ -56,20 +54,16 @@ internal class RemotePresenter(private val interactor: ApiInteractor, private va
         )
     }
 
-    override fun clearRemoteLogs() {
-        view.clearRemoteLineItems()
-    }
+    override fun clearRemoteLogs(): Unit = view.clearRemoteLineItems()
 
     companion object {
-        private fun title(modelWithMetadata: ModelWithMetadata<Post>): String {
-            return modelWithMetadata.model.title
-        }
+        private fun title(modelWithMetadata: ModelWithMetadata<Post>): String = modelWithMetadata.model.title
 
         private fun details(modelWithMetadata: ModelWithMetadata<Post>): String {
             val hash = modelWithMetadata.syncMetadata.id.substring(0, 7)
             val version = modelWithMetadata.syncMetadata.version.toString()
             val deleted = modelWithMetadata.syncMetadata.isDeleted
-            return String.format(Locale.US, "%s, %s, %b", hash, version, deleted)
+            return "$hash, $version, $deleted"
         }
     }
 }

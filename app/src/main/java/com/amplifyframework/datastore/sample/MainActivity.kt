@@ -62,19 +62,11 @@ class MainActivity : AppCompatActivity(), View, RemotePresentation.View {
         }
     }
 
-    override fun displayLocalLogLine(logLine: LogLine) {
-        runOnUiThread { localLogWindow.add(logLine) }
-    }
+    override fun displayLocalLogLine(logLine: LogLine) = runOnUiThread { localLogWindow.add(logLine) }
 
-    override fun clearLocalLineItems() {
-        runOnUiThread { localLogWindow.clear() }
-    }
+    override fun clearLocalLineItems() = runOnUiThread { localLogWindow.clear() }
 
-    override fun displayRemoteLogLine(logLine: LogLine) {
-        runOnUiThread { remoteLogWindow.add(logLine) }
-    }
+    override fun displayRemoteLogLine(logLine: LogLine) = runOnUiThread { remoteLogWindow.add(logLine) }
 
-    override fun clearRemoteLineItems() {
-        runOnUiThread { remoteLogWindow.clear() }
-    }
+    override fun clearRemoteLineItems() = runOnUiThread { remoteLogWindow.clear() }
 }

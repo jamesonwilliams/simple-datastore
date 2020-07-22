@@ -11,8 +11,6 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 
-import java.util.Locale
-
 internal class LocalPresenter(private val interactor: PostInteractor, private val view: View) : Presenter {
     private val ongoingOperations: CompositeDisposable = CompositeDisposable()
 
@@ -61,29 +59,18 @@ internal class LocalPresenter(private val interactor: PostInteractor, private va
             ))
     }
 
-    override fun clearLocalLog() {
-        view.clearLocalLineItems()
-    }
+    override fun clearLocalLog() = view.clearLocalLineItems()
 
-    override fun stopAllLocalActivities() {
-        ongoingOperations.clear()
-    }
+    override fun stopAllLocalActivities() = ongoingOperations.clear()
 
     companion object {
-        private fun title(post: Post): String {
-            return post.title
-        }
+        private fun title(post: Post): String = post.title
 
-        private fun details(post: Post): String {
-            return post.id.substring(0, 7)
-        }
+        private fun details(post: Post): String = post.id.substring(0, 7)
 
-        private fun title(pair: Pair<Post, Modification>): String {
-            return pair.first!!.title
-        }
+        private fun title(pair: Pair<Post, Modification>): String = pair.first!!.title
 
-        private fun details(pair: Pair<Post, Modification>): String {
-            return String.format(Locale.US, "%s, %s", pair.second!!.name, pair.first!!.id)
-        }
+        private fun details(pair: Pair<Post, Modification>): String =
+            "${pair.second!!.name}, ${pair.first!!.id}"
     }
 }
