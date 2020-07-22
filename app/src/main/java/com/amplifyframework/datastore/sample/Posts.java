@@ -27,20 +27,22 @@ final class Posts {
             .build();
     }
 
+    @SuppressWarnings("unused") // Useful for debugging.
     static String toString(ModelWithMetadata<Post> modelWithMetadata) {
         Post model = modelWithMetadata.getModel();
         Integer version = modelWithMetadata.getSyncMetadata().getVersion();
         String truncatedId = model.getId().substring(0, 7);
         return String.format(Locale.US,
-            "%s@%d, \'%s\', \'%s\', \'%d\'.",
+            "%s@%d, '%s', '%s', '%d'.",
             truncatedId, version, model.getTitle(), model.getStatus(), model.getRating()
         );
     }
 
+    @SuppressWarnings("unused") // Useful for debugging.
     static String toString(Post post) {
         String truncatedId = post.getId().substring(0, 7);
         return String.format(Locale.US,
-            "%s, \'%s\', \'%s\', \'%d\'.",
+            "%s, '%s', '%s', '%d'.",
             truncatedId, post.getTitle(), post.getStatus(), post.getRating()
         );
     }

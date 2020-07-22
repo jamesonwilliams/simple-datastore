@@ -4,7 +4,6 @@ import com.amplifyframework.datastore.appsync.ModelWithMetadata;
 import com.amplifyframework.datastore.generated.model.Post;
 
 import java.util.Locale;
-import java.util.UUID;
 
 import io.reactivex.disposables.CompositeDisposable;
 

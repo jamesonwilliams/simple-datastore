@@ -6,7 +6,6 @@ enum Modification {
     CREATE, UPDATE, DELETE;
 
     static Modification from(DataStoreItemChange.Type type) {
-        final Modification modification;
         switch (type) {
             case DELETE:
                 return Modification.DELETE;
