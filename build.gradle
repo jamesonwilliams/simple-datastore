@@ -1,22 +1,25 @@
 buildscript {
     repositories {
         mavenLocal()
+        mavenCentral()
         google()
         jcenter()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.0'
-        classpath 'com.amplifyframework:amplify-tools-gradle-plugin:1.0.0'
+        classpath 'com.android.tools.build:gradle:4.0.1'
+        classpath 'com.amplifyframework:amplify-tools-gradle-plugin:1.0.1'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.72'
     }
 }
-// A problem occurred starting process 'command 'npx''
-// Okay!
+
+// https://github.com/aws-amplify/amplify-android/issues/536
 // apply plugin: 'com.amplifyframework.amplifytools'
 
 allprojects {
     repositories {
         mavenLocal()
+        mavenCentral()
         google()
         jcenter()
     }

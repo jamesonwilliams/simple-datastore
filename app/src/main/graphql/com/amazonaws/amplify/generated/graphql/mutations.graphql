@@ -11,6 +11,8 @@ mutation CreatePost(
     _version
     _deleted
     _lastChangedAt
+    createdAt
+    updatedAt
   }
 }
 mutation UpdatePost(
@@ -25,6 +27,8 @@ mutation UpdatePost(
     _version
     _deleted
     _lastChangedAt
+    createdAt
+    updatedAt
   }
 }
 mutation DeletePost(
@@ -39,5 +43,7 @@ mutation DeletePost(
     _version
     _deleted
     _lastChangedAt
+    createdAt
+    updatedAt
   }
 }
