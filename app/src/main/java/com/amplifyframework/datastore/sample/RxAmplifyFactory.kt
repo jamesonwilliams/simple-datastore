@@ -55,3 +55,4 @@ internal object RxAmplifyFactory {
         return auth
     }
 }
+

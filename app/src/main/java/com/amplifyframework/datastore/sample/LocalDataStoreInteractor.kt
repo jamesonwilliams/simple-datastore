@@ -15,7 +15,6 @@ import java.lang.RuntimeException
 internal class LocalDataStoreInteractor(
         private val auth: RxAuthCategoryBehavior,
         private val dataStore: RxDataStoreCategoryBehavior) : PostInteractor {
-
     override fun createRandom(): Single<Post> {
         val post = Posts.random("Local")
         return dataStore.save(post).toSingleDefault(post)
