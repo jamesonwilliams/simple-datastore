@@ -1,12 +1,14 @@
 # Simple DataStore Sample App
 
+The purpose of this application is to test the Amplify DataStore.
+
 <img src="./screenshot.png" width="300px"/>
 <img src="./landscape-screenshot.png" width="500px" />
 
 ## Installation
 To use, install, and evaluate this application, please do the following:
 
-1. Checkout and build Amplify Android @ `master`.
+1. Checkout and build Amplify Android @ `main`. Publish to your local repository:
 ```sh
 ./gradlew build publishToMavenLocal
 ```
@@ -32,14 +34,39 @@ type Post @model {
 }
 ```
 
-3. Re-build this current app and install it on an Android device.
+Use `amplify init`, `amplify add api`. Follow the [guide to add a DataStore endpoint](https://docs.amplify.aws/lib/datastore/getting-started/q/platform/android#option-2-use-amplify-cli) --
+except choose "Cognito User Pools" as the auth type, instead of API key. Run `amplify push` when done, and wait.
+
+4. Create a valid Cognito user, in your the user pool you just created.
+```sh
+aws cognito-idp admin-create-user \
+    --user-pool-id <pool_id_that_amplify_created> \
+    --username <some_username>
+
+aws cognito-idp admin-set-user-password \
+    --user-pool-id <pool_id_that_amplify_created> \
+    --username <some_username> \
+    --password <some_password> \
+    --permanent
+```
+
+Add the `<some_username>` and `<some_password>` values into
+`app/src/main/res/values/sign_in.xml`. For example, your `sign_in.xml`
+might look as below:
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="username" type="id">koolusr44</string>
+    <string name="password" type="id">koolpass99</string>
+</resources>
+```
+
+5. Re-build this current app and install it on an Android device.
 
 ## Usage
-The purpose of this application is to test the Amplify DataStore.
-
 For repeatable results, you should always swipe-kill the app, before
 running a manual test case:
-```
+```sh
 adb shell am force-stop com.amplifyframework.datastore.sample
 adb uninstall com.amplifyframework.datastore.sample
 ```
@@ -52,7 +79,6 @@ useful for this.
 The best way to understand the behavior of the different buttons is to
 read the
 [`MainActivity.java`](https://github.com/jamesonwilliams/simple-datastore/blob/master/app/src/main/java/com/amplifyframework/datastore/sample/MainActivity.java).
-
 
 ## Portrait Mode
 These are the behaviors of the buttons in the portrait mode of the UI:
@@ -70,35 +96,12 @@ These are the behaviors of the buttons in the portrait mode of the UI:
    cancel mutation, and it would also tear down a subscription.
 7. _CLEAR LOG_: This doesn't do anything to the DataStore. This just
    clears the log in the app window.
+8. _SIGN IN_: Sign in to Cognito using the username and password provided
+   in your `app/src/main/res/values/sign_in.xml`
 
 ## Landscape Mode
 
 The left side shows client-side state, the right side shows AppSync side
 state. As of this time, the right side doesn't include _delete,
 _lastChangedAt, _version, so it is of limited utility.
-
-
-## Advanced Usage
-
-You can also use this app to evaluate open PRs. For example, to evaluate
-the open [`3way_merge`
-PR](https://github.com/aws-amplify/amplify-android/pull/460), you would:
-
-
-1. Build Amplify Android, including that change. Publish the artifact
-   the local Maven repository.
-```
-cd ~/amplify-android
-git fetch origin
-git checkout --track origin/3way_merge -B 3way_merge
-./gradlew clean build publishToMavenLocal
-```
-
-2. Rebuild this app, to make use of that version of the project.
-```
-adb uninstall com.amplifyframework.datastore.sample
-./gradlew build
-adb install -r app/build/outputs/apk/debug/app-debug.apk 
-```
-
 

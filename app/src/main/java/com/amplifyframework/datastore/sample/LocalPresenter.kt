@@ -1,5 +1,6 @@
 package com.amplifyframework.datastore.sample
 
+import android.content.res.Resources
 import android.util.Pair
 
 import com.amplifyframework.datastore.generated.model.Post
@@ -11,7 +12,10 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 
-internal class LocalPresenter(private val interactor: PostInteractor, private val view: View) : Presenter {
+internal class LocalPresenter(
+        private val interactor: PostInteractor,
+        private val view: View,
+        private val resources: Resources) : Presenter {
     private val ongoingOperations: CompositeDisposable = CompositeDisposable()
 
     override fun createLocalItems() {
@@ -62,6 +66,18 @@ internal class LocalPresenter(private val interactor: PostInteractor, private va
     override fun clearLocalLog() = view.clearLocalLineItems()
 
     override fun stopAllLocalActivities() = ongoingOperations.clear()
+
+    override fun signIn() {
+        val username = resources.getString(R.string.username)
+        val password = resources.getString(R.string.password)
+        ongoingOperations.clear()
+        ongoingOperations.add(interactor.signIn(username, password)
+            .subscribe(
+                { view.displayLocalLogLine(LogLine.message("Signed in!", "$username, $password")) },
+                { view.displayLocalLogLine(LogLine.message("Failed to sign in.", it.message!!)) }
+            )
+        )
+    }
 
     companion object {
         private fun title(post: Post): String = post.title

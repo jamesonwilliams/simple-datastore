@@ -40,4 +40,7 @@ dependencies {
     implementation 'com.amplifyframework:aws-datastore:main'
     //noinspection GradleDependency
     implementation 'com.amplifyframework:rxbindings:main'
+    //noinspection GradleDependency
+    implementation 'com.amplifyframework:aws-auth-cognito:main'
+
 }

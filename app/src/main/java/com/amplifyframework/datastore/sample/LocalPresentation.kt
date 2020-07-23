@@ -23,6 +23,7 @@ internal interface LocalPresentation {
         fun startSubscription()
         fun clearLocalLog()
         fun stopAllLocalActivities()
+        fun signIn()
     }
 
     interface PostInteractor {
@@ -31,5 +32,6 @@ internal interface LocalPresentation {
         fun list(): Single<List<Post>>
         fun deleteAll(posts: List<Post>): Completable
         fun subscribe(): Observable<Pair<Post, Modification>>
+        fun signIn(username: String, password: String): Completable
     }
 }
