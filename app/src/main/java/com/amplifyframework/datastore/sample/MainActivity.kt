@@ -1,6 +1,7 @@
 package com.amplifyframework.datastore.sample
 
 import android.os.Bundle
+import android.view.View.OnClickListener
 import android.view.ViewGroup
 
 import androidx.appcompat.app.AppCompatActivity
@@ -27,8 +28,9 @@ class MainActivity : AppCompatActivity(), View, RemotePresentation.View {
 
         val localView: View = this
         val dataStore = RxAmplifyFactory.dataStore(applicationContext)
-        val localInteractor: PostInteractor = LocalDataStoreInteractor(dataStore)
-        localPresenter = LocalPresenter(localInteractor, localView)
+        val auth = RxAmplifyFactory.auth(applicationContext)
+        val localInteractor: PostInteractor = LocalDataStoreInteractor(auth, dataStore)
+        localPresenter = LocalPresenter(localInteractor, localView, applicationContext.resources)
 
         val remoteView: RemotePresentation.View = this
         val appSync = RxAmplifyFactory.appSync(applicationContext)
@@ -37,20 +39,30 @@ class MainActivity : AppCompatActivity(), View, RemotePresentation.View {
     }
 
     private fun bindButtons() {
-        findViewById<android.view.View>(id.create_local).setOnClickListener { localPresenter.createLocalItems() }
-        findViewById<android.view.View>(id.update_local).setOnClickListener { localPresenter.updateLocalItems() }
-        findViewById<android.view.View>(id.delete_local).setOnClickListener { localPresenter.deleteLocalItems() }
-        findViewById<android.view.View>(id.query_local).setOnClickListener { localPresenter.listLocalItems() }
-        findViewById<android.view.View>(id.clear_local).setOnClickListener { localPresenter.clearLocalLog() }
+        val buttonActions = mutableMapOf(
+            Pair(id.create_local, OnClickListener { localPresenter.createLocalItems() }),
+            Pair(id.update_local, OnClickListener { localPresenter.updateLocalItems() }),
+            Pair(id.delete_local, OnClickListener { localPresenter.deleteLocalItems() }),
+            Pair(id.query_local, OnClickListener { localPresenter.listLocalItems() }),
+            Pair(id.clear_local, OnClickListener { localPresenter.clearLocalLog() }),
+            Pair(id.sign_in, OnClickListener { localPresenter.signIn() })
+        )
         if (!Landscape.isLandscape(this)) {
-            findViewById<android.view.View>(id.stop_everything).setOnClickListener { localPresenter.stopAllLocalActivities() }
-            findViewById<android.view.View>(id.begin_subscription).setOnClickListener { localPresenter.startSubscription() }
+            buttonActions.putAll(mapOf(
+                Pair(id.stop_everything, OnClickListener { localPresenter.stopAllLocalActivities() }),
+                Pair(id.begin_subscription, OnClickListener { localPresenter.startSubscription() })
+            ))
         } else {
-            findViewById<android.view.View>(id.create_remote).setOnClickListener { remotePresenter.createRemotePost() }
-            findViewById<android.view.View>(id.update_remote).setOnClickListener { remotePresenter.updateRemotePosts() }
-            findViewById<android.view.View>(id.delete_remote).setOnClickListener { remotePresenter.deleteRemotePosts() }
-            findViewById<android.view.View>(id.query_remote).setOnClickListener { remotePresenter.listRemotePosts() }
-            findViewById<android.view.View>(id.clear_remote).setOnClickListener { remotePresenter.clearRemoteLogs() }
+            buttonActions.putAll(mapOf(
+                Pair(id.create_remote, OnClickListener { remotePresenter.createRemotePost() }),
+                Pair(id.update_remote, OnClickListener { remotePresenter.updateRemotePosts() }),
+                Pair(id.delete_remote, OnClickListener { remotePresenter.deleteRemotePosts() }),
+                Pair(id.query_remote, OnClickListener { remotePresenter.listRemotePosts() }),
+                Pair(id.clear_remote, OnClickListener { remotePresenter.clearRemoteLogs() })
+            ))
+        }
+        for ((id, action) in buttonActions) {
+            findViewById<android.view.View>(id).setOnClickListener(action)
         }
     }
 

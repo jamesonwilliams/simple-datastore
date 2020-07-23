@@ -15,6 +15,7 @@
     <string name="start_subscription">Subscribe…</string>
     <string name="stop_everything">Stop everything</string>
     <string name="clear_log">Clear log</string>
+    <string name="sign_in">Sign in</string>
 
     <!-- Button abbreviations for landscape mode -->
     <string name="create_abbreviation">CR</string>

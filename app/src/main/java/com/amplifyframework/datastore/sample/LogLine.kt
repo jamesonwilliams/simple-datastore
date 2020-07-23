@@ -3,6 +3,7 @@ package com.amplifyframework.datastore.sample
 import com.amplifyframework.datastore.sample.LogLine.EventType.CREATE
 import com.amplifyframework.datastore.sample.LogLine.EventType.DELETE
 import com.amplifyframework.datastore.sample.LogLine.EventType.ERROR
+import com.amplifyframework.datastore.sample.LogLine.EventType.MESSAGE
 import com.amplifyframework.datastore.sample.LogLine.EventType.QUERY
 import com.amplifyframework.datastore.sample.LogLine.EventType.SUBSCRIPTION
 import com.amplifyframework.datastore.sample.LogLine.EventType.UPDATE
@@ -14,6 +15,7 @@ data class LogLine constructor(val eventType: EventType, val title: String, val 
         DELETE("DEL"),
         CREATE("NEW"),
         UPDATE("UPD"),
+        MESSAGE("MSG"),
         ERROR("ERR");
     }
 
@@ -40,6 +42,10 @@ data class LogLine constructor(val eventType: EventType, val title: String, val 
 
         fun update(title: String, details: String): LogLine {
             return create(UPDATE, title, details)
+        }
+
+        fun message(title: String, details: String): LogLine {
+            return create(MESSAGE, title, details)
         }
 
         fun error(title: String, details: String): LogLine {

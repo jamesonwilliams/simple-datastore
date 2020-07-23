@@ -10,6 +10,3 @@ projects:
         codeGenTarget: ''
         generatedFileName: ''
         docsFilePath: app/src/main/graphql/com/amazonaws/amplify/generated/graphql
-extensions:
-  amplify:
-    version: 3
