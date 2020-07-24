@@ -44,13 +44,13 @@ class MainActivity : AppCompatActivity(), View, RemotePresentation.View {
             Pair(id.update_local, OnClickListener { localPresenter.updateLocalItems() }),
             Pair(id.delete_local, OnClickListener { localPresenter.deleteLocalItems() }),
             Pair(id.query_local, OnClickListener { localPresenter.listLocalItems() }),
-            Pair(id.clear_local, OnClickListener { localPresenter.clearLocalLog() }),
-            Pair(id.sign_in, OnClickListener { localPresenter.signIn() })
+            Pair(id.clear_local, OnClickListener { localPresenter.clearLocalLog() })
         )
         if (!Landscape.isLandscape(this)) {
             buttonActions.putAll(mapOf(
                 Pair(id.stop_everything, OnClickListener { localPresenter.stopAllLocalActivities() }),
-                Pair(id.begin_subscription, OnClickListener { localPresenter.startSubscription() })
+                Pair(id.begin_subscription, OnClickListener { localPresenter.startSubscription() }),
+                Pair(id.sign_in, OnClickListener { localPresenter.signIn() })
             ))
         } else {
             buttonActions.putAll(mapOf(
