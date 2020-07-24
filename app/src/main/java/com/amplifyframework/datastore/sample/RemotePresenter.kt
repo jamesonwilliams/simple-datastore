@@ -61,8 +61,8 @@ internal class RemotePresenter(private val interactor: ApiInteractor, private va
 
         private fun details(modelWithMetadata: ModelWithMetadata<Post>): String {
             val hash = modelWithMetadata.syncMetadata.id.substring(0, 7)
-            val version = modelWithMetadata.syncMetadata.version.toString()
-            val deleted = modelWithMetadata.syncMetadata.isDeleted
+            val version = modelWithMetadata.syncMetadata.version
+            val deleted: Boolean = modelWithMetadata.syncMetadata.isDeleted ?: false
             return "$hash, $version, $deleted"
         }
     }

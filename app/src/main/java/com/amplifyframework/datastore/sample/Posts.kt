@@ -12,7 +12,7 @@ internal object Posts {
     fun random(title: String?): Post {
         val random = SecureRandom()
         return Post.builder()
-            .title("$title %${random.nextInt(9999)}")
+            .title("$title #${random.nextInt(9999)}")
             .rating(random.nextInt(5))
             .status(if (random.nextBoolean()) ACTIVE else INACTIVE)
             .build()
@@ -22,7 +22,7 @@ internal object Posts {
         post.copyOfBuilder()
             .rating(post.rating + 5)
             .status(if (ACTIVE == post.status) INACTIVE else ACTIVE)
-            .title("Updated " + post.title)
+            .title("Updated ${post.title}")
             .build()
 
     @Suppress("unused") // Useful for debugging?
