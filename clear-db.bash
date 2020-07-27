@@ -36,6 +36,18 @@ function clear_regular_table() {
 }
 
 
-clear_delta_table 'ds' 'dbname'
-clear_regular_table 'dbname'
+amplify_meta='amplify/#current-cloud-backend/amplify-meta.json'
+json_path='.api[].output.GraphQLAPIIdOutput'
+special_id="$(cat $amplify_meta | jq -r $json_path)"
+
+local_env_info='amplify/.config/local-env-info.json'
+env_name="$(cat $local_env_info | jq -r '.envName')"
+
+schema_files='amplify//#current-cloud-backend/api/*/schema.graphql'
+model_names=($(cat $schema_files | awk '/@model/ { print $2 }'))
+
+clear_delta_table 'ds' "AmplifyDataStore-${special_id}-${env_name}"
+for model_name in ${model_names[@]}; do
+    clear_regular_table "${model_name}-${special_id}-${env_name}"
+done
 
