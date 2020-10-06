@@ -2,22 +2,23 @@ package com.amplifyframework.datastore.sample
 
 import com.amplifyframework.api.graphql.GraphQLBehavior
 import com.amplifyframework.api.graphql.GraphQLResponse
+import com.amplifyframework.api.graphql.PaginatedResult
 import com.amplifyframework.core.model.Model
 import com.amplifyframework.datastore.appsync.AppSync
 import com.amplifyframework.datastore.appsync.AppSyncClient
 import com.amplifyframework.datastore.appsync.ModelWithMetadata
 
-import io.reactivex.Observable
-import io.reactivex.ObservableEmitter
-import io.reactivex.Single
-import io.reactivex.SingleEmitter
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.ObservableEmitter
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.core.SingleEmitter
 
 internal class RxAppSyncClient(graphQlBehavior: GraphQLBehavior) {
     private val appSyncClient: AppSync = AppSyncClient.via(graphQlBehavior)
 
     fun <T : Model> sync(clazz: Class<T>): Observable<ModelWithMetadata<T>> {
-        return Observable.create { emitter: ObservableEmitter<GraphQLResponse<Iterable<ModelWithMetadata<T>>>> ->
-            appSyncClient.sync(clazz, null,
+        return Observable.create { emitter: ObservableEmitter<GraphQLResponse<PaginatedResult<ModelWithMetadata<T>>>> ->
+            appSyncClient.sync(appSyncClient.buildSyncRequest(clazz, null, null),
                  { emitter.onNext(it) },
                  { emitter.onError(it) }
             )

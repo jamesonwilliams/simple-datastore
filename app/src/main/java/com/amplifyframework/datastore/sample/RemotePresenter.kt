@@ -6,7 +6,7 @@ import com.amplifyframework.datastore.sample.RemotePresentation.ApiInteractor
 import com.amplifyframework.datastore.sample.RemotePresentation.Presenter
 import com.amplifyframework.datastore.sample.RemotePresentation.View
 
-import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 
 internal class RemotePresenter(private val interactor: ApiInteractor, private val view: View) : Presenter {
     private val ongoingOperations: CompositeDisposable = CompositeDisposable()

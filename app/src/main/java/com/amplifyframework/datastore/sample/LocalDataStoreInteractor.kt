@@ -7,9 +7,9 @@ import com.amplifyframework.datastore.sample.LocalPresentation.PostInteractor
 import com.amplifyframework.rx.RxAuthCategoryBehavior
 import com.amplifyframework.rx.RxDataStoreCategoryBehavior
 
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 import java.lang.RuntimeException
 
 internal class LocalDataStoreInteractor(

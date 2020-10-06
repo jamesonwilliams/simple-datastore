@@ -3,8 +3,8 @@ package com.amplifyframework.datastore.sample
 import com.amplifyframework.datastore.appsync.ModelWithMetadata
 import com.amplifyframework.datastore.generated.model.Post
 
-import io.reactivex.Observable
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 
 internal interface RemotePresentation {
     interface View {
