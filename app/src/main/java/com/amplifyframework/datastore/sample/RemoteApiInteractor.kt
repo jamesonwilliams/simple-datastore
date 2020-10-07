@@ -4,9 +4,9 @@ import com.amplifyframework.datastore.appsync.ModelWithMetadata
 import com.amplifyframework.datastore.generated.model.Post
 import com.amplifyframework.datastore.sample.RemotePresentation.ApiInteractor
 
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 internal class RemoteApiInteractor(private val appSync: RxAppSyncClient) : ApiInteractor {
     override fun createRandom(): Single<ModelWithMetadata<Post>> =

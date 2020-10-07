@@ -4,9 +4,9 @@ import android.util.Pair
 
 import com.amplifyframework.datastore.generated.model.Post
 
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 
 @Suppress("unused") // The sub-interface are, though. Lint doesn't catch that.
 internal interface LocalPresentation {

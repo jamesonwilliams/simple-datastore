@@ -8,9 +8,9 @@ import com.amplifyframework.datastore.sample.LocalPresentation.PostInteractor
 import com.amplifyframework.datastore.sample.LocalPresentation.Presenter
 import com.amplifyframework.datastore.sample.LocalPresentation.View
 
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.Consumer
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.functions.Consumer
 
 internal class LocalPresenter(
         private val interactor: PostInteractor,
