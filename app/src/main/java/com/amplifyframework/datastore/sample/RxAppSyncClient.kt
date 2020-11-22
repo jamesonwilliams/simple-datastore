@@ -4,6 +4,9 @@ import com.amplifyframework.api.graphql.GraphQLBehavior
 import com.amplifyframework.api.graphql.GraphQLResponse
 import com.amplifyframework.api.graphql.PaginatedResult
 import com.amplifyframework.core.model.Model
+import com.amplifyframework.core.model.ModelSchema
+import com.amplifyframework.core.model.query.predicate.QueryPredicate
+import com.amplifyframework.core.model.query.predicate.QueryPredicates
 import com.amplifyframework.datastore.appsync.AppSync
 import com.amplifyframework.datastore.appsync.AppSyncClient
 import com.amplifyframework.datastore.appsync.ModelWithMetadata
@@ -18,9 +21,10 @@ internal class RxAppSyncClient(graphQlBehavior: GraphQLBehavior) {
 
     fun <T : Model> sync(clazz: Class<T>): Observable<ModelWithMetadata<T>> {
         return Observable.create { emitter: ObservableEmitter<GraphQLResponse<PaginatedResult<ModelWithMetadata<T>>>> ->
-            appSyncClient.sync(appSyncClient.buildSyncRequest(clazz, null, null),
-                 { emitter.onNext(it) },
-                 { emitter.onError(it) }
+            appSyncClient.sync(appSyncClient.buildSyncRequest<T>(ModelSchema.fromModelClass(clazz), null, null,
+                QueryPredicates.all()),
+                { emitter.onNext(it) },
+                { emitter.onError(it) }
             )
         }
         .map { unwrapResponse(it) }
@@ -29,7 +33,7 @@ internal class RxAppSyncClient(graphQlBehavior: GraphQLBehavior) {
 
     fun <T : Model> create(item: T): Single<ModelWithMetadata<T>> {
         return Single.create { emitter: SingleEmitter<GraphQLResponse<ModelWithMetadata<T>>> ->
-            appSyncClient.create(item,
+            appSyncClient.create(item, ModelSchema.fromModelClass(item.javaClass),
                 { emitter.onSuccess(it) },
                 { emitter.onError(it) }
             )
@@ -39,7 +43,7 @@ internal class RxAppSyncClient(graphQlBehavior: GraphQLBehavior) {
 
     fun <T : Model> update(item: T, version: Int): Single<ModelWithMetadata<T>> {
         return Single.create { emitter: SingleEmitter<GraphQLResponse<ModelWithMetadata<T>>> ->
-            appSyncClient.update(item, version,
+            appSyncClient.update(item, ModelSchema.fromModelClass(item.javaClass), version,
                 { emitter.onSuccess(it) },
                 { emitter.onError(it) }
             )
@@ -49,7 +53,7 @@ internal class RxAppSyncClient(graphQlBehavior: GraphQLBehavior) {
 
     fun <T : Model> delete(clazz: Class<T>, itemId: String, version: Int): Single<ModelWithMetadata<T>> {
         return Single.create { emitter: SingleEmitter<GraphQLResponse<ModelWithMetadata<T>>> ->
-            appSyncClient.delete(clazz, itemId, version,
+            appSyncClient.delete<T>(ModelSchema.fromModelClass(clazz), itemId, version,
                 { emitter.onSuccess(it) },
                 { emitter.onError(it) }
             )
